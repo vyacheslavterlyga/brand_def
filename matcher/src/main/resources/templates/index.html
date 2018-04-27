@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<head>
+<title>Matching UI</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet" type="text/css"
+	href="webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
+<script type="text/javascript" src="webjars/jquery/2.2.4/jquery.min.js"></script>
+</head>
+<body>
+	<div class="starter-template">
+		<h1>Matching service</h1>
+
+		<form class="form-horizontal" id="search-form">
+			<div class="form-group form-group-lg">
+				<label class="col-sm-2 control-label">Word for action</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" id="word" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<button type="button" id="insert" req_type="POST"  class="btn btn-primary btn-lg">Insert</button>
+					<button type="button" id="match" req_type="GET"  class="btn btn-primary btn-lg">Match</button>
+				</div>
+			</div>
+		</form>
+
+		<div id="feedback"></div>
+	</div>
+	<script type="text/javascript">
+$(() => {
+	$("#insert, #match").click(function() {
+		var reqType = $(this).attr('req_type');
+		var action = this.id;
+		var respPrefix ="<h4>Ajax Response for '"+action+"' action</h4><pre>";
+		$.ajax({
+	        type: reqType,
+	        contentType: "application/json",
+	        url: "/"+action+"/"+$("#word").val(),
+	        dataType: 'json',
+	        success: function (data) {
+	            $('#feedback').html(respPrefix + JSON.stringify(data) + "</pre>");
+	        },
+	        error: function (e) {
+	            $('#feedback').html(respPrefix + e.responseText + "</pre>");
+	        }
+	    });	
+	});
+});	
+	</script>
+</body>
+</html>
